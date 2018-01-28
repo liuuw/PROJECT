@@ -19,13 +19,19 @@ chisq.test(distribution)
 #2. Unemployment rate
 #3. The rate of single mothers raising children  
 
+install.packages("car")
+library(car)
+scatterplotMatrix(dropout[,c(3:5)], diagonal='histogram',reg.line=NULL , smoother=NULL,legend.plot=F)
 
+head(dropout)
+data<- dropout[,3:5]
 
+par(mfrow=c(1,2))
+E.dist<- dist (data, method='euclidean')
+Clustering <-hclust(E.dist ,method="average")
+plot(Clustering, xlab='Clustering for the dropout')
+abline(h=6000, col="red")
 
-
-
-
-
-
+dim(data)
 
 

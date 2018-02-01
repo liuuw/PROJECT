@@ -1,6 +1,6 @@
 getwd()
-setwd("/Users/liu/Documents/GitHub/PROJECT")
-dropout<-read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vT0toyGGV26hDjrud5Ml1o-ITURpFKkOX5_zmakPa0CjjRlVKzrEHpI7pRdaQrRUI97qHI_IPbklPk7/pub?output=csv")
+#setwd("/Users/liu/Documents/GitHub/PROJECT")
+dropout<-read.csv("https://github.com/liuuw/PROJECT/raw/master/DROUPOUT.csv")
 
 dim(dropout)
 names(dropout)

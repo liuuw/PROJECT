@@ -23,12 +23,7 @@ Verifying data type:
 
 
 
-```{r}
 
-
-
-
-```
 
 
 

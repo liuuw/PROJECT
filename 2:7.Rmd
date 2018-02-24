@@ -1,0 +1,46 @@
+---
+title: "One Page PDF"
+output: pdf_document
+fontsize: 12pt
+header-includes:
+- \usepackage{pagecolor}
+---
+\pagecolor{orange}
+
+
+```{r, warning=FALSE, message=FALSE , echo=FALSE}  
+library(tidyverse) 
+
+donor <- read.csv('https://goo.gl/tm9JQ5')
+```
+
+
+
+### What is the average donation and largest donation amounts by years in recent five years?
+```{r plot, echo=FALSE, fig.width=7, fig.height=4, fig.align='right'}  
+library(tidyverse)
+library(rmarkdown)
+donor %>% 
+  filter(election_year %in% c('2016', '2015', '2014', '2013','2012' )) %>% 
+  group_by(election_year) %>% 
+  summarise(avg_amount = mean(amount), max_amount = max(amount))
+library(ggplot2)
+library(ggthemes)
+donor1 <- donor %>% 
+  filter(election_year %in% c('2016', '2015', '2014', '2013','2012' ))
+
+donor1 %>% ggplot(aes(election_year, fill = primary_general)) + geom_histogram() +theme_fivethirtyeight() + scale_color_fivethirtyeight() + 
+  labs(x = 'years', y = 'Donations',title = 'Number of Donations by years', subtitle = 'Not really precise')
+```
+
+
+Let's take a look at the \textcolor{red}{Table}
+## Including Plots
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE, results = 'asis'}
+library(knitr)
+library(tidyverse)
+donor <- read.csv('https://goo.gl/tm9JQ5')
+donor %>% group_by(election_year) %>% summarise(n = n()) %>% kable(format = 'markdown')
+```
+

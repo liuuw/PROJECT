@@ -121,21 +121,49 @@ $(document).ready(function () {
 </div>
 
 
-<p>part1. reading data</p>
-<pre class="r"><code>dropout&lt;-read.csv(&quot;https://github.com/liuuw/PROJECT/raw/master/DROUPOUT.csv&quot;)
+<p>I would like to know the relationship between droupout rate(county) and other information. For example, how does school districts’ total budget, median household income and unemployment rate affect the droupout rate? Are they positive correlation? Or are there significant difference between rural and urban areas?</p>
+<p>Here are the links that my data comes from: 1.Shape File: <a href="https://data.wa.gov/Demographics/WAOFM-GIS-County-Boundary/sep2-mdr8/data" class="uri">https://data.wa.gov/Demographics/WAOFM-GIS-County-Boundary/sep2-mdr8/data</a></p>
+<p>2.Rural and urban areas: <a href="https://www.doh.wa.gov/Portals/1/Documents/1500/RUCAGuide.pdf" class="uri">https://www.doh.wa.gov/Portals/1/Documents/1500/RUCAGuide.pdf</a></p>
+<p>3.Census Data: State of Washington Open Data Platform and <a href="http://data.spokesman.com/census/2010/washington/counties/" class="uri">http://data.spokesman.com/census/2010/washington/counties/</a></p>
+<p>4.School Districts and Public Schools’ data: National Center for Education Statistics <a href="https://www.ofm.wa.gov/washington-data-research/population-demographics/population-estimates/small-area-estimates-program" class="uri">https://www.ofm.wa.gov/washington-data-research/population-demographics/population-estimates/small-area-estimates-program</a></p>
+<ol start="5" style="list-style-type: decimal">
+<li>Schools’ budgets: <a href="https://nces.ed.gov/edfin/search/peergroupdata.asp?dataid=1&amp;subdataid=1&amp;mt=0&amp;jobid" class="uri">https://nces.ed.gov/edfin/search/peergroupdata.asp?dataid=1&amp;subdataid=1&amp;mt=0&amp;jobid</a>={CDB9F6CF-266C-41A9-87ED-E0867B2EA370}</li>
+</ol>
+<p>6.Household Incomes: <a href="https://www.ofm.wa.gov/sites/default/files/public/legacy/economy/hhinc/medinc.pdf" class="uri">https://www.ofm.wa.gov/sites/default/files/public/legacy/economy/hhinc/medinc.pdf</a></p>
+<p>7.Droupout rats: <a href="https://dev.socrata.com/foundry/data.wa.gov/6g87-pu72" class="uri">https://dev.socrata.com/foundry/data.wa.gov/6g87-pu72</a></p>
+<p>Part1. Reading the data</p>
+<pre class="r"><code>dropout&lt;-read.csv(&quot;https://github.com/liuuw/PROJECT/raw/master/DROUPOUT_DATA.csv&quot;)
 
 dim(dropout)</code></pre>
-<pre><code>## [1] 39 10</code></pre>
+<pre><code>## [1] 39 16</code></pre>
 <pre class="r"><code>names(dropout)</code></pre>
-<pre><code>##  [1] &quot;County&quot;                          &quot;Cohort.Dropout.Rate&quot;            
-##  [3] &quot;Median.household.income.2012&quot;    &quot;unemployment.rate&quot;              
-##  [5] &quot;single.female.with.children&quot;     &quot;Rank.by.Percent&quot;                
-##  [7] &quot;single.male.with.children&quot;       &quot;American.indian..Native.Alaskan&quot;
-##  [9] &quot;Black.percentage&quot;                &quot;White.percentage&quot;</code></pre>
-<p>downloading my data:</p>
+<pre><code>##  [1] &quot;County&quot;                              
+##  [2] &quot;Cohort.Dropout.Rate&quot;                 
+##  [3] &quot;Median.household.income.2012&quot;        
+##  [4] &quot;unemployment.rate&quot;                   
+##  [5] &quot;single.female.with.children&quot;         
+##  [6] &quot;Rank.by.Percent.In.term.of.Column.B.&quot;
+##  [7] &quot;single.male.with.children&quot;           
+##  [8] &quot;American.indian..Native.Alaskan&quot;     
+##  [9] &quot;Black.percentage&quot;                    
+## [10] &quot;White.percentage&quot;                    
+## [11] &quot;TotalRevenuePerStudent&quot;              
+## [12] &quot;TotalFederalRevenuePerStudent&quot;       
+## [13] &quot;TotalLocalRevenuePerStudent&quot;         
+## [14] &quot;TotalStateRevenuePerStudent&quot;         
+## [15] &quot;Student.number&quot;                      
+## [16] &quot;Number.of.public.schools&quot;</code></pre>
+<p>I choose some of relevent variables in the dataset that I believe have connection with the dependent varibable(dropout rates) to do the analysis.</p>
+<p>Since there’s no missing value in WA counties’ census records or schools’ data, basic excel function like ‘if’,‘countif’,‘sum’ can clean the data well.</p>
+<p>We can see that there are 39 counties in WA. I pick up 14 possible independent variables in total for each county and am wandering which might relate to the droupout rate best.</p>
+<p>There are also 39 counties in the attribute table of the WA shape file, which is really handy for us to use the function ‘join’ later to merge the data and show it on the map.</p>
+<p>But for now, let’s look at the univariate exploration first.</p>
+<div id="univariate-exploration" class="section level2">
+<h2>univariate exploration:</h2>
 <p>Verifying data type:</p>
 <pre class="r"><code>#一個區塊不要太多行 (或許四行)
 #讓別人知道我在幹麻</code></pre>
+</div>
 
 
 

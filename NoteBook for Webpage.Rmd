@@ -40,8 +40,7 @@ names(dropout)
 
 I choose some of relevent variables in the dataset that I believe have connection with the dependent varibable(dropout rates) to do the analysis.
 
-Since there's no missing value in WA counties' census records or schools' data, basic excel function like 'if','countif','sum' can clean the data well.
-
+Since there's no missing value in WA counties' census records or schools' data, basic excel function like 'if','countif','sum' can clean the data well. 
 
 We can see that there are 39 counties in WA. I pick up 14 possible independent variables in total for each county and am wandering which might relate to the droupout rate best. 
 
@@ -49,10 +48,14 @@ There are also 39 counties in the attribute table of the WA shape file, which is
 
 But for now, let's look at the univariate exploration first. 
 
-
-##univariate exploration:
+```{r}
+str(dropout)
+```
+##Univariate exploration:
 Turn our attention to counties whose been classified as Rural/Urban. This is the distribution of its values nad its relative frequencies.
 ```{r}
+is.data.frame(dropout)
+length(dropout)
 table(dropout$Region)
 prop.table(table(dropout$Region))
 ```
@@ -68,15 +71,110 @@ mode=distribution[distribution==modeCount]
 names(mode)
 ```
 
-Let's see the revenue difference between Rural and Urban areas.
+Let's see the revenue difference between Rural and Urban areas. (ggplot)
 ```{r}
-dropout%>%
-  filter(
-    Region %in% c('Rural') &
-  )
+library(ggthemes)
+library(tidyverse)
+library(ggplot2)
 
+
+canvas <- ggplot(data=dropout)
+canvas +
+    # using histogram
+    geom_histogram(aes(x=Student_number,     # X = county
+                       fill=TotalRevenuePerStudent # Revenue   
+                       ) 
+                   )     
+
+
+```
+
+Let’s consider for this section the variable that tells us the highest total dropout rate and revenue according to each county.
+
+```{r}
+library(DescTools)
+Mode(dropout$TotalRevenuePerStudent)
+Median(dropout$TotalRevenuePerStudent)
+
+```
+
+
+```{r}
+is.data.frame(dropout)
+head(dropout)
+data <-dropout[,-17]
+```
+
+#Histogram
+```{r}
+hist(x=dropout$Dropout_Rate, 
+     main="Histogram of Dropout Rate",         # Name of picture
+     xlab="Numbers of County (39 Counties in Total)",                      # Name of X-axis
+     ylab="Percent") 
+
+
+```
+
+##Regression
+```{r}
+plot(x=dropout$Dropout_Rate,      #  Values for X axis
+     y=dropout$unemployment_rate,       # Values for Y axis
+     main="Correlation Between Unemployment Rate and Dropout Rate",    # Title
+     xlab="Dropout Rate(%)",       # Name of X axis
+     ylab="Unemploymeny rate(%)"         # Name of Y axis
+)
+
+abline(lm(unemployment_rate~ Dropout_Rate, data=dropout))  # Linear model
+```
+
+
+Let's try it again 
+```{r}
+plot(x=dropout$Dropout_Rate,      #  Values for X axis
+     y=dropout$single_female_with_children,       # Values for Y axis
+     main="Correlation Between Dropout Rate and the Ratio of Single Mother",    # Title
+     xlab="Dropout Rate(%)",       # Name of X axis
+     ylab="The Proportion of Single Mother (%)"         # Name of Y axis
+)
+abline(lm(single_female_with_children~ Dropout_Rate, data=dropout))
+```
+
+
+
+
+##Clustering
+
+```{r}
+
+E.dist <- dist(data, method="euclidean")
+E.dist %>% hclust()%>% plot()%>% par(mfrow=c(1,2))
+
+```
+```{r}
+GG<-data%>% dist(method="euclidean")%>% hclust(method= "ward.D2")%>% 
+  plot()%>% par(mfrow=c(1,2))%>%abline(h=9, col="red")
 
 
 ```
 
 
+
+
+```{r}
+data <- dropout[, -1]
+E.dist <- dist(data, method="euclidean")
+E.dist %>% hclust()%>% plot()%>% par(mfrow=c(1,2))
+library("tidyverse")
+Cluster<-data%>% dist(method="euclidean")%>% hclust(method= "ward.D2")
+
+```
+
+
+##mapping 
+```{r}
+
+
+
+
+
+```

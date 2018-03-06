@@ -145,14 +145,11 @@ abline(lm(single_female_with_children~ Dropout_Rate, data=dropout))
 
 ```{r}
 library(cluster)
+row.names(dropout)=dropout$County
 demoSimi=daisy(dropout[,c(2:16)],metric = "euclidean",
                stand=TRUE)
 demoClus=hclust(demoSimi,method = 'average')
-```
-
-```{r}
-GG<-data%>% dist(method="euclidean")%>% hclust(method= "ward.D2")%>% 
-  plot()%>% par(mfrow=c(1,2))%>%abline(h=9, col="red")
+plot(demoClus,cex=0.5)
 
 
 ```

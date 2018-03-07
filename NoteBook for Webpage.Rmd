@@ -83,7 +83,8 @@ dropout %>%
   summarise(avg_amount = mean(TotalRevenuePerStudent, na.rm = TRUE)) %>%
   ggplot(aes(reorder(County, -avg_amount), avg_amount)) +
   geom_bar(stat = 'identity') + 
-  scale_y_continuous() + theme_classic()
+  scale_y_continuous() + theme_classic() + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 
 ```
@@ -97,25 +98,81 @@ Median(dropout$TotalRevenuePerStudent)
 
 ```
 
+##Skewness and Kurtosis
+```{r}
+library(moments)
+skewness(dropout[,c(2:16)],na.rm = T) 
+```
 
 ```{r}
-is.data.frame(dropout)
-head(dropout)
-data <-dropout[,-17]
+library(moments)
+kurtosis(dropout[,c(2:16)],na.rm = T)
+
 ```
+
+```{r}
+# getting the 'years'
+county=names(kurtosis(dropout[,c(2:16)],na.rm = T))
+
+
+library(stringr)
+library(moments)
+county =str_extract(county, "\\d+")
+
+# now we continue:
+kt=kurtosis(dropout[,c(2:16)],na.rm = T)
+sk=skewness(dropout[,c(2:16)],na.rm = T) 
+par(mfrow=c(2,1))
+plot(county,sk,type = 'l',col='blue',ylab='skewness')
+plot(county,kt,type = 'l',col='red',ylab='kurtosis')
+```
+
+
+
 
 #Histogram
 ```{r}
+par(mfrow = c(2,1)) 
 hist(x=dropout$Dropout_Rate, 
      main="Histogram of Dropout Rate",         # Name of picture
      xlab="Numbers of County (39 Counties in Total)",                      # Name of X-axis
      ylab="Percent") 
+hist(dropout$unemployment_rate,
+     main="Histogram of Unemployment Rate",         # Name of picture
+     xlab="Unemployment Rate 2012",                      # Name of X-axis
+     ylab="Percent")
+```
 
-
+##Boxplot
+```{r}
+par(mfrow = c(1,3)) 
+boxplot(dropout$Median_household_income_2012,	xlab="Household Income 2012", ylab="Dollars")
+boxplot(dropout$unemployment_rate,	xlab="Unemploymet Rate 2012", ylab="Percent")
+boxplot(dropout$TotalRevenuePerStudent,	xlab="Total Revenue Per Student", ylab="Dollars")
+```
+```{r}
+par(mfrow = c(1,2)) 
+boxplot(dropout$single_female_with_children,	xlab="Single Mother Rate 2012", ylab="Percent")
+boxplot(dropout$Dropout_Rate,	xlab="Dropout Rate 2012", ylab="Percent")
 ```
 
 ##Regression
 ```{r}
+explanans=names(dropout)[c(3,4,5,7,8,9,10,11,12,13,14,15,16)]
+for (x in explanans){
+    par=cbind(dropout[,x],dropout$Dropout_Rate)
+    p=cor.test(dropout[,x],dropout$Dropout_Rate)
+    print(paste("Pearson:",p$estimate," - Is significative?",p$p.value<0.05))
+}
+
+
+cor(dropout[explanans])
+```
+
+
+Pearson =0.306
+```{r}
+
 plot(x=dropout$Dropout_Rate,      #  Values for X axis
      y=dropout$unemployment_rate,       # Values for Y axis
      main="Correlation Between Unemployment Rate and Dropout Rate",    # Title
@@ -124,10 +181,12 @@ plot(x=dropout$Dropout_Rate,      #  Values for X axis
 )
 
 abline(lm(unemployment_rate~ Dropout_Rate, data=dropout))  # Linear model
+
+
 ```
 
 
-Let's try it again 
+Pearson=0.08
 ```{r}
 plot(x=dropout$Dropout_Rate,      #  Values for X axis
      y=dropout$single_female_with_children,       # Values for Y axis
@@ -138,9 +197,26 @@ plot(x=dropout$Dropout_Rate,      #  Values for X axis
 abline(lm(single_female_with_children~ Dropout_Rate, data=dropout))
 ```
 
+```{r}
+row.names(dropout)=dropout$County
+
+LinRegEPI = lm(Dropout_Rate ~ TotalFederalRevenuePerStudent + unemployment_rate + single_male_with_children, 
+               data = dropout)
+
+summary(LinRegEPI)
+```
+Residuals, the difference between what this model predicts Y is ( Yp ), and the actual value of Y, should have a bell-shaped distribution.
+Multicollinearity, if the correlation among the X is causing trouble.
+Heteroscedasticity, if the bivariate relationship between the Residuals and the Yp is not constant. Predictability of the model should be constant.
+
+##Logistic Regression
+```{r}
 
 
 
+
+
+```
 ##Clustering
 
 ```{r}
@@ -219,10 +295,36 @@ legend('topright', legend = names(attr(colorPallette, "table")),
        fill = attr(colorPallette, "palette"), cex = shrinkLegend, 
        bty = "n",
        title=legendText)
-
-
-
 ```
+
+```{r}
+library(RColorBrewer)
+library(classInt)
+varToPLot=contribWAmap$Student_number
+
+numberOfClasses = 5
+colorForScale='YlGnBu'
+colors = brewer.pal(numberOfClasses, colorForScale)
+intervals <- classIntervals(varToPLot, numberOfClasses, 
+                            style = "quantile",
+                            dataPrecision=2)
+colorPallette <- findColours(intervals, colors)
+
+legendText="Dropout rate (%)"
+shrinkLegend=0.4
+title="Dropout Rate by County"
+
+plot(wazipMap,col='red',main=title)
+plot(contribWAmap, col = colorPallette,border='grey',add=T)
+
+legend('topright', legend = names(attr(colorPallette, "table")), 
+       fill = attr(colorPallette, "palette"), cex = shrinkLegend, 
+       bty = "n",
+       title=legendText)
+```
+
+
+
 
 
 ```{r}

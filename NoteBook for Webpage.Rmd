@@ -212,10 +212,12 @@ Heteroscedasticity, if the bivariate relationship between the Residuals and the 
 ##Logistic Regression
 ```{r}
 
+LogitEPI_a = glm(Dropout_Rate ~ TotalFederalRevenuePerStudent + unemployment_rate + Region, 
+                  data = dropout 
+                  )
 
-
-
-
+results=coef(summary(LogitEPI_a))
+data.frame(CoefficientExp=exp(results[,1]),Significant=results[,4]<0.05)
 ```
 ##Clustering
 

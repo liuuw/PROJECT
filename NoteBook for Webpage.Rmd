@@ -123,8 +123,8 @@ county =str_extract(county, "\\d+")
 kt=kurtosis(dropout[,c(2:16)],na.rm = T)
 sk=skewness(dropout[,c(2:16)],na.rm = T) 
 par(mfrow=c(2,1))
-plot(county,sk,type = 'l',col='blue',ylab='skewness')
-plot(county,kt,type = 'l',col='red',ylab='kurtosis')
+plot(sk,type = 'l',col='blue',ylab='skewness')
+plot(kt,type = 'l',col='red',ylab='kurtosis')
 ```
 
 

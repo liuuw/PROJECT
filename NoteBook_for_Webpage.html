@@ -127,9 +127,7 @@ $(document).ready(function () {
 <p>2.Rural and urban areas: <a href="https://www.doh.wa.gov/Portals/1/Documents/1500/RUCAGuide.pdf" class="uri">https://www.doh.wa.gov/Portals/1/Documents/1500/RUCAGuide.pdf</a></p>
 <p>3.Census Data: State of Washington Open Data Platform and <a href="http://data.spokesman.com/census/2010/washington/counties/" class="uri">http://data.spokesman.com/census/2010/washington/counties/</a></p>
 <p>4.School Districts and Public Schools’ data: National Center for Education Statistics <a href="https://www.ofm.wa.gov/washington-data-research/population-demographics/population-estimates/small-area-estimates-program" class="uri">https://www.ofm.wa.gov/washington-data-research/population-demographics/population-estimates/small-area-estimates-program</a></p>
-<ol start="5" style="list-style-type: decimal">
-<li>Schools’ budgets: <a href="https://nces.ed.gov/edfin/search/peergroupdata.asp?dataid=1&amp;subdataid=1&amp;mt=0&amp;jobid" class="uri">https://nces.ed.gov/edfin/search/peergroupdata.asp?dataid=1&amp;subdataid=1&amp;mt=0&amp;jobid</a>={CDB9F6CF-266C-41A9-87ED-E0867B2EA370}</li>
-</ol>
+<p>5.Schools’ budgets: <a href="https://nces.ed.gov/edfin/search/peergroupdata.asp?dataid=1&amp;subdataid=1&amp;mt=0&amp;jobid" class="uri">https://nces.ed.gov/edfin/search/peergroupdata.asp?dataid=1&amp;subdataid=1&amp;mt=0&amp;jobid</a>={CDB9F6CF-266C-41A9-87ED-E0867B2EA370}</p>
 <p>6.Household Incomes: <a href="https://www.ofm.wa.gov/sites/default/files/public/legacy/economy/hhinc/medinc.pdf" class="uri">https://www.ofm.wa.gov/sites/default/files/public/legacy/economy/hhinc/medinc.pdf</a></p>
 <p>7.Droupout rats: <a href="https://dev.socrata.com/foundry/data.wa.gov/6g87-pu72" class="uri">https://dev.socrata.com/foundry/data.wa.gov/6g87-pu72</a></p>
 <div id="part1.-reading-the-data" class="section level2">
@@ -543,6 +541,17 @@ summary(LinRegEPI)</code></pre>
 </div>
 <div id="logistic-regression" class="section level2">
 <h2>Logistic Regression</h2>
+<pre class="r"><code>LogitEPI_a = glm(Dropout_Rate ~ TotalFederalRevenuePerStudent + unemployment_rate + Region, 
+                  data = dropout 
+                  )
+
+results=coef(summary(LogitEPI_a))
+data.frame(CoefficientExp=exp(results[,1]),Significant=results[,4]&lt;0.05)</code></pre>
+<pre><code>##                               CoefficientExp Significant
+## (Intercept)                      3645.535919       FALSE
+## TotalFederalRevenuePerStudent       1.000041       FALSE
+## unemployment_rate                   3.047884       FALSE
+## RegionUrban                         0.036923       FALSE</code></pre>
 </div>
 <div id="clustering" class="section level2">
 <h2>Clustering</h2>

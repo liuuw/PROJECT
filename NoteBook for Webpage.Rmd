@@ -19,7 +19,7 @@ http://data.spokesman.com/census/2010/washington/counties/
 National Center for Education Statistics
 https://www.ofm.wa.gov/washington-data-research/population-demographics/population-estimates/small-area-estimates-program
 
-5. Schools' budgets:
+5.Schools' budgets:
 https://nces.ed.gov/edfin/search/peergroupdata.asp?dataid=1&subdataid=1&mt=0&jobid={CDB9F6CF-266C-41A9-87ED-E0867B2EA370}
 
 6.Household Incomes:

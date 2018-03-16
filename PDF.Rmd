@@ -2,30 +2,18 @@
 title: "Executive Summary"
 output: pdf_document
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars, echo= FALSE}
+```{r, echo=FALSE}
 dropout<-read.csv("https://github.com/liuuw/PROJECT/raw/master/DROUPOUT_DATA.csv")
+library(ggthemes)
+library(tidyverse)
 
-dim(dropout)
-names(dropout)
+
+dropout %>% 
+  group_by(County) %>% 
+  summarise(avg_amount = mean(TotalRevenuePerStudent, na.rm = TRUE)) %>%
+  ggplot(aes(reorder(County, -avg_amount), avg_amount)) +
+  geom_bar(stat = 'identity') + 
+  scale_y_continuous() + theme_classic() + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
 ```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

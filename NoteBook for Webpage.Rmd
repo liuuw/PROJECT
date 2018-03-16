@@ -1,7 +1,7 @@
 
 
 
-
+##What am I looking for?
   I would like to know the relationship between droupout rate(county) and other social indicators. For example, how does school districts' total budget, median household income and unemployment rate affect the droupout rate? Are they positive correlation? Or are there significant difference between rural and urban areas? After all, I would like to present my findings in a map and provide some general suggestions for WA government.
 
 Here are the links that my data comes from:
@@ -139,7 +139,7 @@ plot(kt,type = 'l',col='red',ylab='kurtosis')
 
 
 
-#Histogram
+##Histogram
 From the previous part(max, min, median), we can see that the differences among counties are big, so we might want to understand their distributions a bit deeper.
 
 ```{r}
@@ -179,7 +179,7 @@ boxplot(dropout$Dropout_Rate,	xlab="Dropout Rate 2012", ylab="Percent")
 ##Regression
 Here shows the correlation coefficient between each variables and whether it is signicicative.
 We can see that all the variables do Not reaching a statistically significant level, which means my data can't properly catch the social complexity. If we have more theoretical support for choosing independent, we may improve this situation.
-Also, some of the correlation coefficients among my independent variables are too high,like "TotalRevenuePerStudent," "TotalFederalRevenuePerStudent," "TotalLocalRevenuePerStudent" and    "TotalStateRevenuePerStudent," which may affect the accuracy of the analysis. 
+Also, some of the correlation coefficients within my independent variables are too high,like "TotalRevenuePerStudent," "TotalFederalRevenuePerStudent," "TotalLocalRevenuePerStudent" and    "TotalStateRevenuePerStudent," which may affect the accuracy of the analysis. 
 ```{r}
 explanans=names(dropout)[c(3,4,5,7,8,9,10,11,12,13,14,15,16)]
 for (x in explanans){
@@ -222,6 +222,7 @@ plot(x=dropout$Dropout_Rate,      #  Values for X axis
 abline(lm(single_female_with_children~ Dropout_Rate, data=dropout))
 ```
 
+#Mutiple Regression
 We told R that the Y (dropout rate) is to be regressed (~) by all those X variables ( TotalFederalRevenuePerStudent + unemployment_rate + single_male_with_children)
 
 From the results, we can see that the p-value is 0.4797>0.05 and the R-squared is 0.09491,  so our indenpendent variables can only limitedly explain the denpendent varibale.
@@ -245,7 +246,7 @@ summary(LinRegEPI)$adj.r.squared
 
 ##Logistic Regression
 
-We run logistic regression and find out that the binomianl variable (Region: Urban/ country) don't  affect those variables and don't reach a siginificant level statistically.
+We run logistic regression and find out that the binomianl variable (Region: Urban/ country) don't  affect those variables and don't reach a siginificant level statistically. So, my data shows that there are no significant difference between rural and urban areas.
 ```{r}
 
 LogitEPI_a = glm(factor(Region) ~ TotalFederalRevenuePerStudent + unemployment_rate + Dropout_Rate, 
@@ -419,7 +420,7 @@ legend('topright', legend = names(attr(colorPallette, "table")),
 ```
 ##Conclusion
 
-Althought there's no direct causal relationship between dropout rate  and other variables statistically, especailly for the three main variables I used in previous parts. From the map, we find out that while most of the public schools are located near Puget Sound area, students of public schools in the north central area, which commonly be deemed as rural area, receive the highest funding . Such discovery explains that the government does pay attention to students’ learning situation in remote areas. However, we can also see that there are many schools in the central south region, but most schools are underfunded, which accounts for the imbalance between the metro Seattle area and rural areas.
+Althought there's no direct causal relationship between dropout rate  and other variables statistically, especailly for the three main variables I used in previous parts. From the map, we find out that while most of the public schools are located near Puget Sound area, students of public schools in the north central area, which commonly be deemed as rural area, receive the highest funding. Such discovery explains that the government does pay attention to students’ learning situation in remote areas. However, we can also see that there are many schools in the central south region, but most schools are underfunded, which accounts for the imbalance between the metro Seattle area and rural areas.
 
 
 We would like to suggest WA state government to adopt following recommendation:

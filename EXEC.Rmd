@@ -1,0 +1,80 @@
+---
+title: "Executive Summary"
+output: pdf_document
+---
+###Introduction
+ This documents shows the three main variables I used in the project(Unemployment Rate,Total Revenue(school district) and Median Household Income) and it's a brief of my previous work.
+ 
+### Narrative Statistics and plots
+We can understand the characteristics of my three data by the following histograms and boxplots.
+
+```{r, echo=FALSE}
+dropout<-read.csv("https://github.com/liuuw/PROJECT/raw/master/DROUPOUT_DATA.csv")
+
+par(mfrow = c(2,2)) 
+hist(x=dropout$Dropout_Rate, 
+     main="Dropout Rate",         # Name of picture
+     xlab="Numbers of County (39 Counties in Total)",                      # Name of X-axis
+     ylab="Number of counties") 
+hist(dropout$unemployment_rate,
+     main="Unemployment Rate",         # Name of picture
+     xlab="Unemployment Rate 2012",                      # Name of X-axis
+     ylab="Number of counties")
+hist(x=dropout$TotalRevenuePerStudent, 
+     main="Total Revenue",         # Name of picture
+     xlab="Revenue($)",                      # Name of X-axis
+     ylab="Number of counties") 
+
+hist(x=dropout$Median_household_income_2012, 
+     main="Median Household Income",         # Name of picture
+     xlab="Income($)",                      # Name of X-axis
+     ylab="Number of counties ")
+ 
+```
+```{r, echo=FALSE}
+par(mfrow = c(1,4)) 
+boxplot(dropout$Median_household_income_2012,	xlab="Household Income 2012", ylab="Dollars")
+boxplot(dropout$unemployment_rate,	xlab="Unemploymet Rate 2012", ylab="Percent")
+boxplot(dropout$TotalRevenuePerStudent,	xlab="Total Revenue Per Student", ylab="Dollars")
+boxplot(dropout$Dropout_Rate,	xlab="Dropout Rate 2012", ylab="Percent")
+opts_chunk$set(width=50, height=50)
+```
+
+###Clustering
+Here, the dendrogram is different from the two I used in my MASTER. I classify counties into different groups based on only three main variables here, and the two in my MASTER are based on more than ten variables.
+We can see that Ferry County and Whitman County here are classified as outliers because their high unemployment rates and low median household income.
+```{r, echo =FALSE}
+library(cluster)
+row.names(dropout)=dropout$County
+demoSimi=daisy(dropout[,c(3,4,11)],metric = "euclidean",
+               stand=TRUE)
+demoClus=hclust(demoSimi,method = 'average')
+plot(demoClus,cex=0.5)
+
+```
+
+###Regression
+```{r,echo =FALSE}
+explanans=names(dropout)[c(3,4,11)]
+for (x in explanans){
+    par=cbind(dropout[,x],dropout$Dropout_Rate)
+    p=cor.test(dropout[,x],dropout$Dropout_Rate)
+    print(paste("Pearson:",p$estimate," - Is significative?",p$p.value<0.05))
+}
+```
+As I mentioned in the MASTER, the three variables don't have strong relationship with the dropout rate. In fact, none of my 14 variables are significative enough to the dropout rate.
+```{r, results='asis',echo= FALSE,header =F}
+library(stargazer)
+
+ABC <-cor(dropout[,c("TotalRevenuePerStudent","unemployment_rate","Median_household_income_2012")])
+stargazer(ABC,title='matrix',header =F)
+```
+From the matrix, we can see that the unemployment rate is relative to the median householde income, if we would like to dive deep to what really causes the high dropout rate, we might want to avoid choose variables like this. We can also understand the complexity in social phenomenon from here because all the potential indenpendent variables I thought might have relationship with the dropout rate fail to properly explain it. If anyone want to have a thorough understanding of dropout rate in WA state, we recommend that they seek theoretical support before collecting data.
+
+
+
+
+
+
+
+

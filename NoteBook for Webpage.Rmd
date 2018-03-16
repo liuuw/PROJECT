@@ -257,7 +257,9 @@ results=coef(summary(LogitEPI_a))
 data.frame(CoefficientExp=exp(results[,1]),Significant=results[,4]<0.05)
 ```
 ##Clustering
-From the dendrogram, we can see that King county is the outliner of the data, I use different methods(average and ercliedean) to classify my data, both show the similar reseult.
+From the dendrogram, we can see that King county is the outliner of the data, I use different methods(average and ercliedean) to classify my data, both show the similar reseult. 
+
+NOTE: The following two plots are ploted according to all the independent variables.
 ```{r}
 library(cluster)
 row.names(dropout)=dropout$County
@@ -429,7 +431,7 @@ We would like to suggest WA state government to adopt following recommendation:
 2) To find out the counties (like Benton) or that might potentially need financial aid in the near future. Such precautionary measure may prevent the potential dropout problem.
 3) To better serve our students, we recommend that the Washington State government provide guidance and technical assistance to financailly disadvantaged counties to optimize the use of current limited budget.
 
-Washington State government can use these maps to identify the targeted counties that need extra assistance and consider how to balance the regional development among different areas. Also, they may keep eyes on the relevant social indicators (e.g. proportion of people of color, median household income, unemployment rate) and analyze the correlation between them and dropout rate or counties' revenue, which will help the government make better budget decisions based on solid data rather than debating or outdated experience. These changes would serve the students in remote areas better and contribute to mutually achieving the collective goal of school districts, local governments and Washington State government.
+Washington State government can use these maps to identify the targeted counties that need extra assistance and consider how to balance the regional development among different areas. Also, they may keep eyes on the relevant social indicators (e.g. proportion of people of color, median household income, unemployment rate) and analyze the correlation between them and dropout rate or school districts' revenue, which will help the government make better budget decisions based on solid data rather than debating or outdated experience. These changes would serve the students in remote areas better and contribute to mutually achieving the collective goal of school districts, local governments and Washington State government.
 
 
 

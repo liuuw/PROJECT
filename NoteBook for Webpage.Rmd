@@ -2,7 +2,7 @@
 
 
 ##What am I looking for?
-  I would like to know the relationship between droupout rate(county) and other social indicators. For example, how does school districts' total budget, median household income and unemployment rate affect the droupout rate? Are they positive correlation? Or are there significant difference between rural and urban areas? After all, I would like to present my findings in a map and provide some general suggestions for WA government.
+  I would like to know the relationship between droupout rate(county) and other social indicators. For example, how does school districts' total budget, median household income and unemployment rate affect the droupout rate? Are they positive correlation? Or are there significant difference between rural and urban areas? After all, I would like to present my findings in a map and provide some general suggestions for WA government in the executive summary.
 
 Here are the links that my data comes from:
 

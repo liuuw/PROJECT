@@ -2,7 +2,7 @@
 
 
 
-  I would like to know the relationship between droupout rate(county) and other social indicators. For example, how does school districts' total budget, median household income and unemployment rate affect the droupout rate? Are they positive correlation? Or are there significant difference between rural and urban areas? After all, I would like to present my findings in a map.
+  I would like to know the relationship between droupout rate(county) and other social indicators. For example, how does school districts' total budget, median household income and unemployment rate affect the droupout rate? Are they positive correlation? Or are there significant difference between rural and urban areas? After all, I would like to present my findings in a map and provide some general suggestions for WA government.
 
 Here are the links that my data comes from:
 
@@ -179,6 +179,7 @@ boxplot(dropout$Dropout_Rate,	xlab="Dropout Rate 2012", ylab="Percent")
 ##Regression
 Here shows the correlation coefficient between each variables and whether it is signicicative.
 We can see that all the variables do Not reaching a statistically significant level, which means my data can't properly catch the social complexity. If we have more theoretical support for choosing independent, we may improve this situation.
+Also, some of the correlation coefficients among my independent variables are too high,like "TotalRevenuePerStudent," "TotalFederalRevenuePerStudent," "TotalLocalRevenuePerStudent" and    "TotalStateRevenuePerStudent," which may affect the accuracy of the analysis. 
 ```{r}
 explanans=names(dropout)[c(3,4,5,7,8,9,10,11,12,13,14,15,16)]
 for (x in explanans){
@@ -416,17 +417,18 @@ legend('topright', legend = names(attr(colorPallette, "table")),
        bty = "n",
        title=legendText)
 ```
+##Conclusion
 
-Althought there's no direct causal relationship between dropout rate  and other variable statistically. From the map, we find out that while most of the public schools are located near Puget Sound area, students of public schools in the north central area, which commonly be deemed as rural area, receive the highest funding . Such discovery explains that the government does pay attention to students’ learning situation in remote areas. However, we can also see that there are many schools in the central south region, but most schools are underfunded, which accounts for the imbalance between the metro Seattle area and rural areas.
+Althought there's no direct causal relationship between dropout rate  and other variables statistically, especailly for the three main variables I used in previous parts. From the map, we find out that while most of the public schools are located near Puget Sound area, students of public schools in the north central area, which commonly be deemed as rural area, receive the highest funding . Such discovery explains that the government does pay attention to students’ learning situation in remote areas. However, we can also see that there are many schools in the central south region, but most schools are underfunded, which accounts for the imbalance between the metro Seattle area and rural areas.
 
 
 We would like to suggest WA state government to adopt following recommendation:
 
-1) To coordinate and communicate with county governments to know what might the underfunded school districts need and incrementally increase funding for school districts in the northeast, south central area.
-2) To find out the counties (like Benton) or districts (like districts in the southwest area or areas with unemployment problems) that might potentially need financial aid in the near future. Such precautionary measure may prevent the recurrence of huge budget shortfalls in some districts, which can sacrifice other districts’ interest due to the limited overall budgeting
-3) To better serve our students, we recommend that the Washington State government provide guidance and technical assistance to disadvantaged districts to optimize the use of current limited budget.
+1) To coordinate and communicate with county governments to know what might the underfunded school districts within a county need and incrementally increase funding for county in the northeast, south central area.
+2) To find out the counties (like Benton) or that might potentially need financial aid in the near future. Such precautionary measure may prevent the potential dropout problem.
+3) To better serve our students, we recommend that the Washington State government provide guidance and technical assistance to financailly disadvantaged counties to optimize the use of current limited budget.
 
-Washington State government can use these maps to identify the targeted school districts that need extra assistance and consider how to balance the regional development among different areas. Also, they may keep eyes on the relevant social indicators (e.g. proportion of people of color, median household income) and analyze the correlation between them and school districts’ revenue, which will help the government make better budget decisions based on solid data rather than debating or outdated experience. These changes would serve the students in remote areas better and contribute to mutually achieving the collective goal of school districts, local governments and Washington State government.
+Washington State government can use these maps to identify the targeted counties that need extra assistance and consider how to balance the regional development among different areas. Also, they may keep eyes on the relevant social indicators (e.g. proportion of people of color, median household income, unemployment rate) and analyze the correlation between them and dropout rate or counties' revenue, which will help the government make better budget decisions based on solid data rather than debating or outdated experience. These changes would serve the students in remote areas better and contribute to mutually achieving the collective goal of school districts, local governments and Washington State government.
 
 
 

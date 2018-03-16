@@ -2,7 +2,7 @@
 
 
 
-  I would like to know the relationship between droupout rate(county) and other information. For example, how does school districts' total budget, median household income and unemployment rate affect the droupout rate? Are they positive correlation? Or are there significant difference between rural and urban areas?
+  I would like to know the relationship between droupout rate(county) and other social indicators. For example, how does school districts' total budget, median household income and unemployment rate affect the droupout rate? Are they positive correlation? Or are there significant difference between rural and urban areas? After all, I would like to present my findings in a map.
 
 Here are the links that my data comes from:
 
@@ -25,7 +25,7 @@ https://nces.ed.gov/edfin/search/peergroupdata.asp?dataid=1&subdataid=1&mt=0&job
 6.Household Incomes:
 https://www.ofm.wa.gov/sites/default/files/public/legacy/economy/hhinc/medinc.pdf
 
-7.Droupout rats:
+7.Droupout rates:
 https://dev.socrata.com/foundry/data.wa.gov/6g87-pu72
 
 
@@ -39,15 +39,15 @@ dim(dropout)
 names(dropout)
 ```
 
-I choose some of relevent variables in the dataset that I believe have connection with the dependent varibable(dropout rates) to do the analysis.
+I choose some of relevent variables in the dataset that I think might have connection with the dependent varibable(dropout rates) to do the analysis.
 
 Since there's no missing value in WA counties' census records or schools' data, basic excel function like 'if','countif','sum' can clean the data well. 
 
-We can see that there are 39 counties in WA. I pick up 14 possible independent variables in total for each county and am wandering which might relate to the droupout rate best. 
+We can see that there are 39 counties in WA. I pick up 14 possible independent variables in total for each county and am wandering which might relate to the droupout rate best. After try and error, this analysis will focus more on 'total revenue per student,''median household income,' and 'unemployment rate.'
 
-There are also 39 counties in the attribute table of the WA shape file, which is really handy for us to use the function 'join' later to merge the data and show it on the map. 
+There are also 39 counties in the attribute table of the WA shape file, which is really handy for us to merge the data and show it on the map. 
 
-But for now, let's look at the univariate exploration first. 
+For now, let's look at the univariate exploration first. 
 
 ```{r}
 str(dropout)
@@ -72,7 +72,9 @@ mode=distribution[distribution==modeCount]
 names(mode)
 ```
 
-Let's see the revenue difference between Rural and Urban areas. (ggplot)
+
+##Part.II Take a look at the data
+Let's see the revenue difference among these 39 counties and sort by their budget. (ggplot)
 ```{r}
 library(ggthemes)
 library(tidyverse)
@@ -93,12 +95,19 @@ Let’s consider for this section the variable that tells us the highest total d
 
 ```{r}
 library(DescTools)
-Mode(dropout$TotalRevenuePerStudent)
+max(dropout$TotalRevenuePerStudent)
+min(dropout$TotalRevenuePerStudent)
 Median(dropout$TotalRevenuePerStudent)
+
+max(dropout$Dropout_Rate)
+min(dropout$Dropout_Rate)
+Median(dropout$Dropout_Rate)
 
 ```
 
 ##Skewness and Kurtosis
+
+We don't need to do skewness and kutosis for this dataset, this part can be seemed as a practice.
 ```{r}
 library(moments)
 skewness(dropout[,c(2:16)],na.rm = T) 
@@ -131,16 +140,27 @@ plot(kt,type = 'l',col='red',ylab='kurtosis')
 
 
 #Histogram
+From the previous part(max, min, median), we can see that the differences among counties are big, so we might want to understand their distributions a bit deeper.
+
 ```{r}
-par(mfrow = c(2,1)) 
+par(mfrow = c(2,2)) 
 hist(x=dropout$Dropout_Rate, 
      main="Histogram of Dropout Rate",         # Name of picture
      xlab="Numbers of County (39 Counties in Total)",                      # Name of X-axis
-     ylab="Percent") 
+     ylab="Number of counties") 
 hist(dropout$unemployment_rate,
      main="Histogram of Unemployment Rate",         # Name of picture
      xlab="Unemployment Rate 2012",                      # Name of X-axis
-     ylab="Percent")
+     ylab="Number of counties")
+hist(x=dropout$TotalRevenuePerStudent, 
+     main="Histogram of Total Revenue",         # Name of picture
+     xlab="Revenue($)",                      # Name of X-axis
+     ylab="Number of counties") 
+
+hist(x=dropout$Median_household_income_2012, 
+     main="Histogram of Household Income",         # Name of picture
+     xlab="Income($)",                      # Name of X-axis
+     ylab="Number of counties ")
 ```
 
 ##Boxplot
@@ -157,6 +177,8 @@ boxplot(dropout$Dropout_Rate,	xlab="Dropout Rate 2012", ylab="Percent")
 ```
 
 ##Regression
+Here shows the correlation coefficient between each variables and whether it is signicicative.
+We can see that all the variables do Not reaching a statistically significant level, which means my data can't properly catch the social complexity. If we have more theoretical support for choosing independent, we may improve this situation.
 ```{r}
 explanans=names(dropout)[c(3,4,5,7,8,9,10,11,12,13,14,15,16)]
 for (x in explanans){
@@ -169,6 +191,8 @@ for (x in explanans){
 cor(dropout[explanans])
 ```
 
+
+#### Here shows the plot of the highest correlation coefficient of my chosen variables and the dropout rate.
 
 Pearson =0.306
 ```{r}
@@ -197,30 +221,41 @@ plot(x=dropout$Dropout_Rate,      #  Values for X axis
 abline(lm(single_female_with_children~ Dropout_Rate, data=dropout))
 ```
 
+We told R that the Y (dropout rate) is to be regressed (~) by all those X variables ( TotalFederalRevenuePerStudent + unemployment_rate + single_male_with_children)
+
+From the results, we can see that the p-value is 0.4797>0.05 and the R-squared is 0.09491,  so our indenpendent variables can only limitedly explain the denpendent varibale.
 ```{r}
 row.names(dropout)=dropout$County
 
-LinRegEPI = lm(Dropout_Rate ~ TotalFederalRevenuePerStudent + unemployment_rate + single_male_with_children, 
+LinRegEPI = lm(Dropout_Rate ~ TotalFederalRevenuePerStudent + unemployment_rate + single_male_with_children + Median_household_income_2012, 
                data = dropout)
 
 summary(LinRegEPI)
 ```
-Residuals, the difference between what this model predicts Y is ( Yp ), and the actual value of Y, should have a bell-shaped distribution.
-Multicollinearity, if the correlation among the X is causing trouble.
-Heteroscedasticity, if the bivariate relationship between the Residuals and the Yp is not constant. Predictability of the model should be constant.
+The adjusted R-squared usually is  from 0 to 1, the closer to 1 the better, and ours is -0.01, which means a little.
+
+```{r}
+results=coef(summary(LinRegEPI))
+
+data.frame(Coefficient=results[,1],Significant=results[,4]<0.05)
+
+summary(LinRegEPI)$adj.r.squared 
+```
 
 ##Logistic Regression
+
+We run logistic regression and find out that the binomianl variable (Region: Urban/ country) don't  affect those variables and don't reach a siginificant level statistically.
 ```{r}
 
-LogitEPI_a = glm(Dropout_Rate ~ TotalFederalRevenuePerStudent + unemployment_rate + Region, 
-                  data = dropout 
+LogitEPI_a = glm(factor(Region) ~ TotalFederalRevenuePerStudent + unemployment_rate + Dropout_Rate, 
+                  data = dropout, family = binomial()
                   )
 
 results=coef(summary(LogitEPI_a))
 data.frame(CoefficientExp=exp(results[,1]),Significant=results[,4]<0.05)
 ```
 ##Clustering
-
+From the dendrogram, we can see that King county is the outliner of the data, I use different methods(average and ercliedean) to classify my data, both show the similar reseult.
 ```{r}
 library(cluster)
 row.names(dropout)=dropout$County
@@ -231,8 +266,6 @@ plot(demoClus,cex=0.5)
 
 
 ```
-
-
 
 
 ```{r}
@@ -253,6 +286,8 @@ dropout1=dropout[,c('County','TotalRevenuePerStudent','Student_number')]
 str(dropout1)
 Map="https://github.com/liuuw/PROJECT/raw/master/WAOFM%20-%20GIS%20-%20County%20Boundary.zip"
 ```
+We load the Shape file first.
+
 ```{r}
 library(utils)
 temp=tempfile()
@@ -272,7 +307,9 @@ plot(contribWAmap,col='pink',border='grey',add=T)
 ```
 
 
+And plot it with different colors in terms of the Dropout rate, Number of students, Number of Schools and Total Revenue.
 
+###Map.1
 ```{r}
 library(RColorBrewer)
 library(classInt)
@@ -299,6 +336,7 @@ legend('topright', legend = names(attr(colorPallette, "table")),
        title=legendText)
 ```
 
+###Map.2
 ```{r}
 library(RColorBrewer)
 library(classInt)
@@ -312,9 +350,35 @@ intervals <- classIntervals(varToPLot, numberOfClasses,
                             dataPrecision=2)
 colorPallette <- findColours(intervals, colors)
 
-legendText="Dropout rate (%)"
+legendText="Number of students(%)"
 shrinkLegend=0.4
-title="Dropout Rate by County"
+title="Number of Students "
+
+plot(wazipMap,col='red',main=title)
+plot(contribWAmap, col = colorPallette,border='grey',add=T)
+
+legend('topright', legend = names(attr(colorPallette, "table")), 
+       fill = attr(colorPallette, "palette"), cex = shrinkLegend, 
+       bty = "n",
+       title=legendText)
+```
+###Map.3
+```{r}
+library(RColorBrewer)
+library(classInt)
+varToPLot=contribWAmap$Number_of_public_schools
+
+numberOfClasses = 5
+colorForScale='YlGnBu'
+colors = brewer.pal(numberOfClasses, colorForScale)
+intervals <- classIntervals(varToPLot, numberOfClasses, 
+                            style = "quantile",
+                            dataPrecision=2)
+colorPallette <- findColours(intervals, colors)
+
+legendText="Number of Schools"
+shrinkLegend=0.4
+title="Number of Public Schools for Each County"
 
 plot(wazipMap,col='red',main=title)
 plot(contribWAmap, col = colorPallette,border='grey',add=T)
@@ -326,9 +390,7 @@ legend('topright', legend = names(attr(colorPallette, "table")),
 ```
 
 
-
-
-
+###Map.4
 ```{r}
 library(RColorBrewer)
 library(classInt)
@@ -353,5 +415,20 @@ legend('topright', legend = names(attr(colorPallette, "table")),
        fill = attr(colorPallette, "palette"), cex = shrinkLegend, 
        bty = "n",
        title=legendText)
-
 ```
+
+Althought there's no direct causal relationship between dropout rate  and other variable statistically. From the map, we find out that while most of the public schools are located near Puget Sound area, students of public schools in the north central area, which commonly be deemed as rural area, receive the highest funding . Such discovery explains that the government does pay attention to students’ learning situation in remote areas. However, we can also see that there are many schools in the central south region, but most schools are underfunded, which accounts for the imbalance between the metro Seattle area and rural areas.
+
+
+We would like to suggest WA state government to adopt following recommendation:
+
+1) To coordinate and communicate with county governments to know what might the underfunded school districts need and incrementally increase funding for school districts in the northeast, south central area.
+2) To find out the counties (like Benton) or districts (like districts in the southwest area or areas with unemployment problems) that might potentially need financial aid in the near future. Such precautionary measure may prevent the recurrence of huge budget shortfalls in some districts, which can sacrifice other districts’ interest due to the limited overall budgeting
+3) To better serve our students, we recommend that the Washington State government provide guidance and technical assistance to disadvantaged districts to optimize the use of current limited budget.
+
+Washington State government can use these maps to identify the targeted school districts that need extra assistance and consider how to balance the regional development among different areas. Also, they may keep eyes on the relevant social indicators (e.g. proportion of people of color, median household income) and analyze the correlation between them and school districts’ revenue, which will help the government make better budget decisions based on solid data rather than debating or outdated experience. These changes would serve the students in remote areas better and contribute to mutually achieving the collective goal of school districts, local governments and Washington State government.
+
+
+
+
+

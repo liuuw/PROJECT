@@ -9,7 +9,7 @@ output: pdf_document
 We can understand the characteristics of my three data by the following histograms and boxplots.
 
 ```{r, echo=FALSE}
-dropout<-read.csv("https://github.com/liuuw/PROJECT/raw/master/DROUPOUT_DATA.csv")
+dropout<-read.csv("https://github.com/liuuw/PROJECT/raw/master/Dataset.csv")
 
 par(mfrow = c(2,2)) 
 hist(x=dropout$Dropout_Rate, 
@@ -31,13 +31,14 @@ hist(x=dropout$Median_household_income_2012,
      ylab="Number of counties ")
  
 ```
+
 ```{r, echo=FALSE}
 par(mfrow = c(1,4)) 
 boxplot(dropout$Median_household_income_2012,	xlab="Household Income 2012", ylab="Dollars")
 boxplot(dropout$unemployment_rate,	xlab="Unemploymet Rate 2012", ylab="Percent")
 boxplot(dropout$TotalRevenuePerStudent,	xlab="Total Revenue Per Student", ylab="Dollars")
 boxplot(dropout$Dropout_Rate,	xlab="Dropout Rate 2012", ylab="Percent")
-opts_chunk$set(width=50, height=50)
+
 ```
 
 ###Clustering
@@ -71,6 +72,16 @@ stargazer(ABC,title='matrix',header =F)
 ```
 From the matrix, we can see that the unemployment rate is relative to the median householde income, if we would like to dive deep to what really causes the high dropout rate, we might want to avoid choose variables like this. We can also understand the complexity in social phenomenon from here because all the potential indenpendent variables I thought might have relationship with the dropout rate fail to properly explain it. If anyone want to have a thorough understanding of dropout rate in WA state, we recommend that they seek theoretical support before collecting data.
 
+##Conclusion
+
+Althought there's no direct causal relationship between dropout rate  and other variables statistically, especailly for the three main variables I used in previous parts. From MAP.1 to MAP.4 in MASTER, we find out that while most of the public schools are located near Puget Sound area, students of public schools in the north central area, which commonly be deemed as rural area, receive the highest funding. Such discovery explains that the government does pay attention to students’ learning situation in remote areas. However, we can also see that there are many schools in the central south region, but most schools are underfunded, which accounts for the imbalance between the metro Seattle area and rural areas.
+
+
+We would like to suggest WA state government to adopt following recommendation:
+
+1) To coordinate and communicate with county governments to know what might the underfunded school districts within a county need and incrementally increase funding for county in the northeast, south central area.
+2) To find out the counties (like Benton) or that might potentially need financial aid in the near future. Such precautionary measure may prevent the potential dropout problem.
+3) To better serve our students, we recommend that the Washington State government provide guidance and technical assistance to financailly disadvantaged counties to optimize the use of current limited budget.
 
 
 

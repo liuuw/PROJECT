@@ -33,7 +33,7 @@ https://dev.socrata.com/foundry/data.wa.gov/6g87-pu72
 ##Part1. Reading the data 
 
 ```{r}
-dropout<-read.csv("https://github.com/liuuw/PROJECT/raw/master/DROUPOUT_DATA.csv")
+dropout<-read.csv("https://github.com/liuuw/PROJECT/raw/master/Dataset.csv")
 
 dim(dropout)
 names(dropout)
@@ -74,7 +74,7 @@ names(mode)
 
 
 ##Part.II Take a look at the data
-Let's see the revenue difference among these 39 counties and sort by their budget. (ggplot)
+Let's see the school districts' revenue difference among these 39 counties and sort by their budget. (ggplot)
 ```{r}
 library(ggthemes)
 library(tidyverse)
@@ -300,7 +300,7 @@ unzip(temp)
 (maps=list.files(pattern = 'shp'))
 
 library(rgdal)
-wazipMap <- rgdal::readOGR("geo_export_109cf655-8ce8-4eea-8b93-dc816b22de53.shp",stringsAsFactors=F) # use name
+wazipMap <- rgdal::readOGR("ShapeFile_ForWA",stringsAsFactors=F) # use name
 names(wazipMap)
 str(wazipMap$name)
 str(dropout$County)
@@ -420,18 +420,8 @@ legend('topright', legend = names(attr(colorPallette, "table")),
        bty = "n",
        title=legendText)
 ```
-##Conclusion
-
-Althought there's no direct causal relationship between dropout rate  and other variables statistically, especailly for the three main variables I used in previous parts. From the map, we find out that while most of the public schools are located near Puget Sound area, students of public schools in the north central area, which commonly be deemed as rural area, receive the highest funding. Such discovery explains that the government does pay attention to students’ learning situation in remote areas. However, we can also see that there are many schools in the central south region, but most schools are underfunded, which accounts for the imbalance between the metro Seattle area and rural areas.
 
 
-We would like to suggest WA state government to adopt following recommendation:
-
-1) To coordinate and communicate with county governments to know what might the underfunded school districts within a county need and incrementally increase funding for county in the northeast, south central area.
-2) To find out the counties (like Benton) or that might potentially need financial aid in the near future. Such precautionary measure may prevent the potential dropout problem.
-3) To better serve our students, we recommend that the Washington State government provide guidance and technical assistance to financailly disadvantaged counties to optimize the use of current limited budget.
-
-Washington State government can use these maps to identify the targeted counties that need extra assistance and consider how to balance the regional development among different areas. Also, they may keep eyes on the relevant social indicators (e.g. proportion of people of color, median household income, unemployment rate) and analyze the correlation between them and dropout rate or school districts' revenue, which will help the government make better budget decisions based on solid data rather than debating or outdated experience. These changes would serve the students in remote areas better and contribute to mutually achieving the collective goal of school districts, local governments and Washington State government.
 
 
 

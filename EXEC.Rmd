@@ -5,7 +5,7 @@ output: pdf_document
 ###Introduction
  This documents shows the three main variables I used in the project(Unemployment Rate,Total Revenue(school district) and Median Household Income) and it's a brief of my previous work.
  
-### Narrative Statistics and plots
+### Narrative Statistics and Plots
 We can understand the characteristics of my three data by the following histograms and boxplots.
 
 ```{r, echo=FALSE}
@@ -31,8 +31,9 @@ hist(x=dropout$Median_household_income_2012,
      ylab="Number of counties ")
  
 ```
+###Boxplots:
 
-```{r, echo=FALSE}
+```{r, echo=FALSE,fig.width = 7, fig.height = 3}
 par(mfrow = c(1,4)) 
 boxplot(dropout$Median_household_income_2012,	xlab="Household Income 2012", ylab="Dollars")
 boxplot(dropout$unemployment_rate,	xlab="Unemploymet Rate 2012", ylab="Percent")
@@ -70,7 +71,9 @@ library(stargazer)
 ABC <-cor(dropout[,c("TotalRevenuePerStudent","unemployment_rate","Median_household_income_2012")])
 stargazer(ABC,title='matrix',header =F)
 ```
-From the matrix, we can see that the unemployment rate is relative to the median householde income, if we would like to dive deep to what really causes the high dropout rate, we might want to avoid choose variables like this. We can also understand the complexity in social phenomenon from here because all the potential indenpendent variables I thought might have relationship with the dropout rate fail to properly explain it. If anyone want to have a thorough understanding of dropout rate in WA state, we recommend that they seek theoretical support before collecting data.
+
+
+From the matrix, we can see that the unemployment rate is relative to the median householde income, if we would like to dive deeper and know what really causes the high dropout rate, we might want to avoid choose variables like this. We can also understand the complexity in social phenomenon from here because all the potential indenpendent variables I thought might have relationship with the dropout rate fail to properly explain it. If anyone want to have a thorough understanding of dropout rate in WA state, we recommend that they seek theoretical support before collecting data.
 
 ##Conclusion
 
@@ -83,7 +86,7 @@ We would like to suggest WA state government to adopt following recommendation:
 2) To find out the counties (like Benton) or that might potentially need financial aid in the near future. Such precautionary measure may prevent the potential dropout problem.
 3) To better serve our students, we recommend that the Washington State government provide guidance and technical assistance to financailly disadvantaged counties to optimize the use of current limited budget.
 
-
+Washington State government can use these maps to identify the targeted counties that need extra assistance and consider how to balance the regional development among different areas. Also, they may keep eyes on the relevant social indicators (e.g. proportion of people of color, median household income, unemployment rate) and analyze the correlation between them and dropout rate or school districts' revenue, which will help the government make better budget decisions based on solid data rather than debating or outdated experience. These changes would serve the students in remote areas better and contribute to mutually achieving the collective goal of school districts, local governments and Washington State government.
 
 
 

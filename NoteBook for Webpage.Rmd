@@ -300,7 +300,7 @@ unzip(temp)
 (maps=list.files(pattern = 'shp'))
 
 library(rgdal)
-wazipMap <- rgdal::readOGR("ShapeFile_ForWA",stringsAsFactors=F) # use name
+wazipMap <- rgdal::readOGR("geo_export_109cf655-8ce8-4eea-8b93-dc816b22de53.shp",stringsAsFactors=F) # use name
 names(wazipMap)
 str(wazipMap$name)
 str(dropout$County)
